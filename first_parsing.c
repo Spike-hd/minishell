@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   first_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/14 17:00:55 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/14 18:27:21 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	quote_v2(char *s, int limit) // va verifier si on se trouve entre des "",
+{
+	int	i;
+	int	single_quote;
+	int	double_quote;
+
+	single_quote = 0;
+	double_quote = 0;
+	i = 0;
+	while (s[i] && i < limit)
+	{
+		if (s[i] == '\'')
+		{
+			if (double_quote % 2 == 0)
+				single_quote++;
+		}
+		else if (s[i] == '"')
+		{
+			if (single_quote % 2 == 0)
+				double_quote++;
+		}
+		i++;
+	}
+	return (single_quote % 2 != 0 || double_quote % 2 != 0);
+}
 
 int	quote(char *s) // va verifier si on se trouve entre des "",
 {
@@ -62,22 +88,10 @@ int	count_args(char *s, int *semicolon, int i)
 				i++;
 		}
 	}
-
-	// Gérer `semicolon`
-	if (s[i] == ';')
-	{
-		*semicolon = 1; // Il reste un point-virgule à gérer
-		printf("Do you see me ? s[i] = %c\n", s[i]);
-	}
-	else
-	{
+	if (s[i] != ';')
 		*semicolon = 0; // Fin de chaîne sans point-virgule
-		printf("Do you see me (null) ? s[i] = %c\n", s[i]);
-	}
 	return (count);
 }
-
-
 
 char	*extract_words(char *s, int i, int start)
 {
@@ -96,7 +110,6 @@ char	*extract_words(char *s, int i, int start)
 int	parse_args(char *s, int *i, int *start)
 {
 	char quote;
-	printf("TEST DUBUG %s", s);
 
 	while (s[*i] == ' ')
 		(*i)++;
@@ -120,6 +133,7 @@ int	parse_args(char *s, int *i, int *start)
 	}
 	return (1); // => argument trouvé
 }
+
 char	**first_parsing(char *str, int *semicolon, int *error)
 {
 	int		i;

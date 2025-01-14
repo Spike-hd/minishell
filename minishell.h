@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:12:17 by spike             #+#    #+#             */
-/*   Updated: 2025/01/14 17:01:25 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/14 18:07:30 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,7 @@ void	free_all(char *rl, char **lines);
 // -------------PARSE 1 --------------
 char	**first_parsing(char *str, int *semicolon, int *error);
 int		quote(char *s);
+int		quote_v2(char *s, int limit);
+
 
 #endif

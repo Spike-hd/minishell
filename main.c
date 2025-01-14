@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/14 17:03:06 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/14 19:52:53 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*handle_substr(char *rl, char **lines)
 	i = 0;
 	while (rl[i])
 	{
-		if (rl[i] == ';'&& !quote(rl))
+		if (rl[i] == ';'&& !quote_v2(rl, i))
 			break;
 		i++;
 	}
@@ -70,14 +70,16 @@ int	while_semicolon(char *rl, int semicolon, int error)
 
 	while (semicolon)
 	{
-		printf("\nRL === %s\n", rl);
+		printf("\nRL === %s\n", rl); //DEL
 		lines = first_parsing(rl, &semicolon, &error);
 		if (error)
 			error_handle("problem with quotes or with malloc\n");
-		print_split_result(lines, semicolon); // DEL
-		// else{
-		// /*handle the rest of the logic*/
-		// }
+		//print_split_result(lines, semicolon); // DEL
+		else
+		{
+			check_parsing_and_exec(lines); // ERROR ou pas ?
+		/*handle the rest of the logic*/
+		}
 		if (semicolon)
 		{
 			rl = handle_substr(rl, lines); // clear lines et substr rl pour la prochaine comamnde
