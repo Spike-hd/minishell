@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:38:06 by spike             #+#    #+#             */
-/*   Updated: 2025/01/14 13:35:07 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/14 16:59:59 by hduflos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,18 @@ void	free_all(char *rl, char **lines)
 	free(rl);
 }
 
-int	check_error_quote(char **str, int index, int i)
+int	check_error_quote(char **str, int index)
 {
-	int j;
-	int single_quote;
-	int	double_quote;
+	int	i;
 
-	single_quote = 0;
-	double_quote = 0;
+	i = 0;
 	while (i < index)
 	{
-		j = -1;
-		while (str[i][++j])
-		{
-			if (str[i][j] == '\'')
-			{
-				if (double_quote % 2 == 0)
-					single_quote++;
-			}
-			else if (str[i][j] == '"')
-			{
-				if (single_quote % 2 == 0)
-					double_quote++;
-			}
-		}
+		if (quote(str[i]) != 0)
+			return (1);
 		i++;
 	}
-	return (single_quote % 2 != 0 || double_quote % 2 != 0);
+	return (0);
 }
 
 int	error_handle(char *s)

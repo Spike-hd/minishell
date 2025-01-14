@@ -6,7 +6,7 @@ LIBFT_DIR = libft
 OBJ_DIR = objects
 
 # Fichiers sources
-SRC_FILES = errors.c main.c
+SRC_FILES = errors.c main.c first_parsing.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
 # Compilateur et options
@@ -30,7 +30,8 @@ $(LIBFT):
 
 # Créer l'exécutable
 $(MINISHELL): $(OBJ_DIR) $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) -o $(MINISHELL) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) -o $(MINISHELL) $(LIBFT) -lreadline -lncurses -I/usr/local/include -L/usr/local/lib
+
 
 # Règle pour générer les fichiers objets
 $(OBJ_DIR)/%.o: %.c $(INC)

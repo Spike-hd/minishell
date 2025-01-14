@@ -3,29 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   first_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/14 13:21:25 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/14 17:00:55 by hduflos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_in_quote(char *s, int i, int c) // c represente la quote
+int	quote(char *s) // va verifier si on se trouve entre des "",
 {
-	int	n;
-	int	count;
+	int	i;
+	int	single_quote;
+	int	double_quote;
 
-	n = 0;
-	count = 0;
-	while (n < i)
+	single_quote = 0;
+	double_quote = 0;
+	i = 0;
+	while (s[i])
 	{
-		if (s[n] == c)
-			count++;
-		n++;
+		if (s[i] == '\'')
+		{
+			if (double_quote % 2 == 0)
+				single_quote++;
+		}
+		else if (s[i] == '"')
+		{
+			if (single_quote % 2 == 0)
+				double_quote++;
+		}
+		i++;
 	}
-	return (count % 2 == 0);
+	return (single_quote % 2 != 0 || double_quote % 2 != 0);
 }
 
 int	count_args(char *s, int *semicolon, int i)
@@ -41,21 +51,32 @@ int	count_args(char *s, int *semicolon, int i)
 		if (s[i] != 0 && s[i] != ';')
 		{
 			count++;
-			if (is_in_quote(s, i, '\'') || is_in_quote(s, i, '"'))
+			if (s[i] == '\'' || s[i] == '"')
 			{
 				quote = s[i];
 				i++;
 				while (s[i] != quote && s[i] != '\0')
 					i++;
 			}
-			else
+			if (s[i] != '\0' && s[i] != ' ' && s[i] != ';') // Avancer dans le reste
 				i++;
 		}
 	}
+
+	// Gérer `semicolon`
 	if (s[i] == ';')
-		*semicolon = 1;
+	{
+		*semicolon = 1; // Il reste un point-virgule à gérer
+		printf("Do you see me ? s[i] = %c\n", s[i]);
+	}
+	else
+	{
+		*semicolon = 0; // Fin de chaîne sans point-virgule
+		printf("Do you see me (null) ? s[i] = %c\n", s[i]);
+	}
 	return (count);
 }
+
 
 
 char	*extract_words(char *s, int i, int start)
@@ -75,6 +96,7 @@ char	*extract_words(char *s, int i, int start)
 int	parse_args(char *s, int *i, int *start)
 {
 	char quote;
+	printf("TEST DUBUG %s", s);
 
 	while (s[*i] == ' ')
 		(*i)++;
@@ -89,6 +111,8 @@ int	parse_args(char *s, int *i, int *start)
 			quote = s[*i];
 			(*i)++;
 			while (s[*i] != quote && s[*i] != '\0')
+				(*i)++;
+			if (s[*i] == quote)
 				(*i)++;
 		}
 		else
@@ -120,7 +144,7 @@ char	**first_parsing(char *str, int *semicolon, int *error)
 		index++;
 	}
 	result[index] = NULL;
-	if (check_error_quote(result, index, 0))
+	if (check_error_quote(result, index))
 		*error = 1;
 	return (result);
 }

@@ -1,0 +1,39 @@
+Le but est de parser les instructions de minishell :
+
+On va utiliser une matrice
+
+Qu'est ce qui separe les arguments ?
+Les arguments sont separes par des espaces SAUF si ils sont entre "" ou ''
+	-> Dans ce cas ils sont separes par la fin du "" ou '
+
+Que fais ";" ?
+Le point-virgule (;) dans un shell est utilisé pour exécuter plusieurs commandes successivement, l'une après l'autre, sur la même ligne.
+Cela permet de séparer les commandes et de les exécuter dans l'ordre où elles sont écrites, sans tenir compte de la réussite ou de l'échec des précédentes.
+
+
+Il faut donc parse non pas jusqu'a la fin de la string mais :
+	-> soit jusqu'a la fin de la string
+	-> soit jusqu'a (;)
+
+
+Point important dans le parsing :
+
+Cas 1 :
+	hduflos@c3r2p10 ~ % cat born2beroot/signature.txt
+	b33931a5788f8440c605f222b2eab17e35e639c3
+
+Cas 2 :
+	hduflos@c3r2p10 ~ % cat "born2beroot/signature.txt"
+	b33931a5788f8440c605f222b2eab17e35e639c3
+
+Cas 3 :
+	hduflos@c3r2p10 ~ % cat"born2beroot/signature.txt"
+	zsh: no such file or directory: catborn2beroot/signature.txt
+
+Meme si on utilise des "" ou '' il faut laisser un espace sinon le code n'est pas reconnu.
+
+
+
+Le parsage se deroule donc ainsi :
+	while (str[i])
+		-> A chaque espace = nouvel arg SAUF si FLAG_GUILLEMET = TRUE
