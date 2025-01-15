@@ -6,7 +6,7 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/14 19:52:53 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/15 15:55:03 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 
 
-
-void	print_split_result(char **lines, int semicolon)
+/* Fonction de test pour voir si les av sont bien tries (il faudra delete) */
+void	print_split_result(char **lines)
 {
 	int i = 0;
 
@@ -28,7 +28,7 @@ void	print_split_result(char **lines, int semicolon)
 	printf("Split result:\n");
 	while (lines[i])
 	{
-		printf("lines[%d]: %s // semicolon ?= %d\n", i, lines[i], semicolon);
+		printf("lines[%d]: %s\n", i, lines[i]);
 		i++;
 	}
 	printf("Total arguments: %d\n", i);
@@ -36,74 +36,36 @@ void	print_split_result(char **lines, int semicolon)
 
 
 
-
-char	*handle_substr(char *rl, char **lines)
+/* Cette fonction sert simplement a alleger le main mais peut etre qu'on peut tout mettre dans le main */
+int	parse_and_exec(char *rl, t_args *args, int error)
 {
-	int	i;
-	size_t len;
-	char *temp;
-
-	i = 0;
-	while (rl[i])
-	{
-		if (rl[i] == ';'&& !quote_v2(rl, i))
-			break;
-		i++;
-	}
-	len = ft_strlen(rl);
-	if (rl[i] == ';')
-	{
-		len -= i;
-		temp = ft_substr(rl, i + 1, len);
-		free_all(rl, lines);
-		return (temp);
-	}
-	free_all(rl, lines);
-	return (NULL);
-}
-
-
-
-int	while_semicolon(char *rl, int semicolon, int error)
-{
-	char	**lines; // => va etre notre tableau qui va stocker la commande et les options
-
-	while (semicolon)
-	{
-		printf("\nRL === %s\n", rl); //DEL
-		lines = first_parsing(rl, &semicolon, &error);
-		if (error)
+	args->av = init_av(rl, &error);
+	if (error)
 			error_handle("problem with quotes or with malloc\n");
-		//print_split_result(lines, semicolon); // DEL
-		else
-		{
-			check_parsing_and_exec(lines); // ERROR ou pas ?
-		/*handle the rest of the logic*/
-		}
-		if (semicolon)
-		{
-			rl = handle_substr(rl, lines); // clear lines et substr rl pour la prochaine comamnde
-			if (!rl)
-			{
-				error_handle("pb clearing rl / lines or pb substr");
-			}
-		}
-		else
-			free_all(rl, lines);
+	//print_split_result(args->av); // DEL
+	else
+	{
+		init_metachar(args);
+		// exec
 	}
+	free_all(rl, args->av); // -> attention il faudra free d'autres choses
 	return (0);
 }
 
 int	main(void)
 {
 	char	*rl;
+	t_args	*args;
 
+	args = malloc(sizeof(t_args));
+	if (!args)
+		return (error_handle("problem with args allocation\n"));
 	while(1)
 	{
 		rl = readline("Minishell > ");
 		if (!rl)
 			return (error_handle("problem with rl fct\n"));
-		while_semicolon(rl, 1, 0);
+		parse_and_exec(rl, args, 0);
 	}
 	return (0);
 }
