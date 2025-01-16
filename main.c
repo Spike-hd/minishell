@@ -6,7 +6,7 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 17:35:58 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/16 19:48:37 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	main(void)
 		return (error_handle("problem with args allocation\n"));
 	while(1)
 	{
-		rl = readline("Minishell > ");
+		rl = readline (COMPUTER " Minishell > " RESET);
 		if (!rl)
 			return (error_handle("problem with rl fct\n"));
 		parse_and_exec(rl, args, 0);

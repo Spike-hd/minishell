@@ -6,7 +6,7 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:12:17 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 17:32:28 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/16 19:48:42 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,20 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include "libft/libft.h"
+
+
+// Color codes
+#define RED     "\033[0;31m"
+#define GREEN   "\033[0;32m"
+#define YELLOW  "\033[1;33m"
+#define RESET   "\033[0m"
+
+// Emojis
+#define ROCKET  "🚀"
+#define THUMBS_UP "👍"
+#define CHECK_MARK "✅"
+#define TRASH "🗑️"
+#define COMPUTER "💻"
 
 
 #define RESET_COLOR "\033[0m"

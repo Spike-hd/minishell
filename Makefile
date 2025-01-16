@@ -1,3 +1,17 @@
+# Color
+RED = \033[0;31m
+GREEN = \033[0;32m
+YELLOW = \033[1;33m
+RESET = \033[0m
+
+# Ajouter des smileys
+SMILEY = 😊
+THUMBS_UP = 👍
+CHECK_MARK = ✅
+TRASH = 🗑️
+COMPUTER = 💻
+ROCKET = 🚀
+
 # Nom de l'exécutable
 MINISHELL = minishell
 
@@ -19,33 +33,39 @@ INC = minishell.h $(LIBFT_DIR)/libft.h
 
 # Règle par défaut : compiler les exécutables
 all: $(OBJ_DIR) $(LIBFT) $(MINISHELL)
+	@echo "$(GREEN)Compilation successful! $(ROCKET)$(RESET)"
 
 # Créer le répertoire pour les objets
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
+	@echo "$(YELLOW)Creating object directory $(OBJ_DIR)... $(COMPUTER)$(RESET)"
 
 # Créer la bibliothèque libft
 $(LIBFT):
 	make -C $(LIBFT_DIR)
+	@echo "$(GREEN)libft library built! $(CHECK_MARK)$(RESET)"
 
 # Créer l'exécutable
 $(MINISHELL): $(OBJ_DIR) $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) -o $(MINISHELL) $(LIBFT) -lreadline -lncurses -I/usr/local/include -L/usr/local/lib
-
+	@echo "$(YELLOW)Compiling $(MINISHELL)... $(COMPUTER)$(RESET)"
+	@$(CC) $(CFLAGS) $(OBJ) -o $(MINISHELL) $(LIBFT) -lreadline -lncurses -I/usr/local/include -L/usr/local/lib
+	@echo "$(GREEN)$(MINISHELL) successfully created! $(THUMBS_UP)$(RESET)"
 
 # Règle pour générer les fichiers objets
 $(OBJ_DIR)/%.o: %.c $(INC)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 # Nettoyage des fichiers objets
 clean:
-	rm -rf $(OBJ_DIR)
-	make -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJ_DIR)
+	@make -C $(LIBFT_DIR) clean
+	@echo "$(RED)Objects cleaned! $(TRASH)$(RESET)"
 
 # Nettoyage complet (objets + exécutables)
 fclean: clean
-	rm -f $(MINISHELL)
-	make -C $(LIBFT_DIR) fclean
+	@rm -f $(MINISHELL)
+	@make -C $(LIBFT_DIR) fclean
+	@echo "$(RED)Executable $(MINISHELL) removed! $(TRASH)$(RESET)"
 
 # Recompilation complète
 re: fclean all
