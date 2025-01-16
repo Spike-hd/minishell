@@ -1,3 +1,7 @@
+
+https://github.com/Hqndler/42-minishell?tab=readme-ov-file
+QnYosa minishell
+
 Le but est de parser les instructions de minishell :
 
 On va utiliser une matrice
@@ -88,5 +92,11 @@ typedef struct s_args
 }				t_args;
 
 
-https://github.com/Hqndler/42-minishell?tab=readme-ov-file
-QnYosa minishell
+
+Ou j'en suis maintenant :
+
+J'ai parse correctement et en respectant les quotes les arguments.
+J'ai maintenant un tableau qui recence toute les informations necessaire.
+ce qu'il me reste a faire :
+J'ai un probleme dans la destruction des guillemets pour les strings qui en ont besoin
+Je dois, avant de parse et initialiser ma 2nd structure gerer tous les $ pour les transformer par ce qu'ils représentent directement

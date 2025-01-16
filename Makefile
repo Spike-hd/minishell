@@ -6,7 +6,7 @@ LIBFT_DIR = libft
 OBJ_DIR = objects
 
 # Fichiers sources
-SRC_FILES = errors.c main.c init_av.c init_metachar.c errors2.c
+SRC_FILES = errors.c main.c init_av.c init_metachar.c errors2.c error_quote.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
 # Compilateur et options

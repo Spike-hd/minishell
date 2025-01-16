@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 13:50:16 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:35:58 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ int	parse_and_exec(char *rl, t_args *args, int error)
 	args->av = init_av(rl, &error);
 	if (error)
 			error_handle("problem with quotes or with malloc\n");
-	print_split_result(args->av); // DEL
-	// else
-	// {
-	// 	init_all(args);
-	// 	print_all(args); // DEL
-	// 	free_args_struct(&args);
-	// 	// exec
-	// }
+	//print_split_result(args->av); // DEL
+	else
+	{
+		init_all(args);
+		print_all(args); // DEL
+		free_args_struct(&args);
+		// exec
+	}
 	// free_all(rl, args->av); // -> attention il faudra free d'autres choses
 	return (0);
 }

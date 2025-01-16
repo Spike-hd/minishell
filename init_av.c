@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_av.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 13:16:43 by hduflos           #+#    #+#             */
-/*   Updated: 2025/01/16 15:34:52 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:25:25 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	quote(char *s) // va verifier si on se trouve entre des "",
-{
-	int	i;
-	int	single_quote;
-	int	double_quote;
-
-	single_quote = 0;
-	double_quote = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '\'')
-		{
-			if (double_quote % 2 == 0)
-				single_quote++;
-		}
-		else if (s[i] == '"')
-		{
-			if (single_quote % 2 == 0)
-				double_quote++;
-		}
-		i++;
-	}
-	return (single_quote % 2 != 0 || double_quote % 2 != 0);
-}
-
 
 char	*extract_words(char *s, int i, int start)
 {
@@ -90,93 +63,41 @@ int	parse_args(char *s, int *i, int *start)
 	return (1); // Argument trouvé
 }
 
-
-// int	count_args(char *s)
-// {
-// 	int		i;
-// 	int		count;
-// 	char	quote;
-// 	int		in_quote;
-
-// 	count = 0;
-// 	i = 0;
-// 	in_quote = 0;
-// 	while (s[i])
-// 	{
-// 		while (s[i] == ' ')
-// 			i++;
-// 		if (s[i] != '\0')
-// 		{
-// 			count++;
-// 			if ((s[i] == '\'' || s[i] == '"') && !in_quote)
-// 			{
-// 				quote = s[i];
-// 				in_quote = 1;
-// 				i++;
-// 				while (s[i] != quote && s[i] != '\0')
-// 					i++;
-// 				if (s[i] == quote)
-// 				{
-// 					printf("u see me? IN QUOTE ? %d\n", in_quote);
-// 					in_quote = 0;
-// 				}
-// 			}
-// 			while (s[i] != ' ' && s[i] != '\0' && (!in_quote || s[i] != quote))
-// 				i++;
-// 		}
-// 	}
-// 	printf("IN QUOTE ? %d // count ================= %d\n", in_quote, count);
-// 	if (in_quote == 1)
-// 		printf("pb args\n");
-// 	return (count);
-// }
-
-
-int	count_args(char *str)
+int	count_args(char *s)
 {
 	int		i;
 	int		count;
 	char	quote;
-	int		in_quote;
 
 	count = 0;
 	i = 0;
-	in_quote = 0;
-	while (str[i])
+	while (s[i])
 	{
-		while (str[i] == ' ')
+		// Ignorer les espaces
+		while (s[i] == ' ')
 			i++;
-		if (str[i] != '\0')
+		if (s[i] != '\0')
 		{
-			count++;
-			if ((str[i] == '\'' || str[i] == '"') && !in_quote)
+			count++; // Détecte un nouvel argument
+			if (s[i] == '\'' || s[i] == '"')
 			{
-				quote = str[i];
+				quote = s[i];
 				i++;
-				in_quote = 1;
-				while (str[i] != quote && str[i])
+				// Parcourir jusqu'à la fin des guillemets ou de la chaîne
+				while (s[i] != quote && s[i] != '\0')
 					i++;
-				if (str[i] == '\0')
-				{
-					printf("end here normally %d // count ================= %d\n", in_quote, count);
-					return (count);
-				}
-				if (str[i] == quote)
-				{
-					printf("u see me? IN QUOTE ? %d\n", in_quote);
-					in_quote = 0;
-				}
+				if (s[i] == quote)
+					i++; // Avancer après le guillemet fermant
 			}
-			while (str[i] != ' ' && str[i] != '\0' && (!in_quote || str[i] != quote))
+			// Gérer le reste de l'argument non entre guillemets
+			while (s[i] != ' ' && s[i] != '\0' && s[i] != '\'' && s[i] != '"')
 				i++;
-
-			}
+		}
 	}
-	printf("IN QUOTE ? %d // count ================= %d\n", in_quote, count);
-	if (in_quote == 1)
-		printf("pb args\n");
+	printf(" count ==== %d\n", count);
 	return (count);
 }
+
 
 /* Cette fonction va comme son nom l'indique initialiser **av avec
 av[0] = le programme demandé
@@ -207,6 +128,6 @@ char	**init_av(char *str, int *error)
 	}
 	result[index] = NULL;
 	if (check_error_quote(result, index))
-		*error = 1;
+		quote_prompt(result, index);
 	return (result);
 }

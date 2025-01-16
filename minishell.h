@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:12:17 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 13:35:10 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/16 17:32:28 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,16 @@ typedef struct s_args
 
 // --------------ERROR-------------
 void	*error_malloc(char **result, int index, int *error);
-int		check_error_quote(char **result, int index);
 int		error_handle(char *s);
 void	free_all(char *rl, char **lines);
 
 // --------------ERROR 2------------
 int	free_args_struct(t_args **args);
+
+// Special case if quote are not even
+int	quote_prompt(char **result, int index);
+int	check_error_quote(char **str, int index);
+int	quote(char *s);
 
 // -------------PARSE 1 --------------
 char	**init_av(char *str, int *error);
