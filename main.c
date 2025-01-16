@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/15 15:55:03 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/16 13:50:16 by hduflos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,26 @@ void	print_split_result(char **lines)
 	printf("Total arguments: %d\n", i);
 }
 
+void print_all(t_args *args)
+{
+    int i = 0;
+
+    while (i < args->ac)
+    {
+        printf("Argument [%d]:\n", i);
+        printf("  av = %s\n", args->av[i]);
+        printf("  was_in_quote = %d\n", args->was_in_quote[i]);
+        printf("  pipe = %d\n", args->pipe[i]);
+        printf("  redirect_output = %d\n", args->redirect_output[i]);
+        printf("  append_redirect = %d\n", args->append_redirect[i]);
+        printf("  redirect_input = %d\n", args->redirect_input[i]);
+        printf("  heredoc = %d\n", args->heredoc[i]);
+		printf("\n\n");
+        i++;
+    }
+    printf("\n");
+}
+
 
 
 /* Cette fonction sert simplement a alleger le main mais peut etre qu'on peut tout mettre dans le main */
@@ -42,13 +62,15 @@ int	parse_and_exec(char *rl, t_args *args, int error)
 	args->av = init_av(rl, &error);
 	if (error)
 			error_handle("problem with quotes or with malloc\n");
-	//print_split_result(args->av); // DEL
-	else
-	{
-		init_metachar(args);
-		// exec
-	}
-	free_all(rl, args->av); // -> attention il faudra free d'autres choses
+	print_split_result(args->av); // DEL
+	// else
+	// {
+	// 	init_all(args);
+	// 	print_all(args); // DEL
+	// 	free_args_struct(&args);
+	// 	// exec
+	// }
+	// free_all(rl, args->av); // -> attention il faudra free d'autres choses
 	return (0);
 }
 
@@ -56,6 +78,8 @@ int	main(void)
 {
 	char	*rl;
 	t_args	*args;
+
+	printf("%s\n\n\n", MINISHELL_TEST);
 
 	args = malloc(sizeof(t_args));
 	if (!args)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:38:06 by spike             #+#    #+#             */
-/*   Updated: 2025/01/15 14:20:40 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/16 10:37:58 by hduflos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ void	*error_malloc(char **result, int index, int *error)
 	return (NULL);
 }
 
-void	free_all(char *rl, char **lines)
+void	free_all(char *rl, char **av)
 {
 	int	index;
 
 	index = 0;
-	while (lines[index])
+	while (av[index])
 	{
-		free(lines[index]);
+		free(av[index]);
 		index++;
 	}
-	free(lines);
+	free(av);
 	free(rl);
 }
 
