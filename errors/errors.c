@@ -6,11 +6,11 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 19:38:06 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 17:36:20 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/18 19:04:18 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	*error_malloc(char **result, int index, int *error)
 {

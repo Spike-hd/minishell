@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_metachar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 19:44:46 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 11:57:26 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/18 19:04:39 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*delete_quote(char *str, int count, int c)
 {

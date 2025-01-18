@@ -6,55 +6,11 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:11:42 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 19:48:37 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/18 19:07:03 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
-
-/* Fonction de test pour voir si les av sont bien tries (il faudra delete) */
-void	print_split_result(char **lines)
-{
-	int i = 0;
-
-	if (!lines)
-	{
-		printf("Lines is NULL.\n");
-		return;
-	}
-
-	printf("Split result:\n");
-	while (lines[i])
-	{
-		printf("lines[%d]: %s\n", i, lines[i]);
-		i++;
-	}
-	printf("Total arguments: %d\n", i);
-}
-
-void print_all(t_args *args)
-{
-    int i = 0;
-
-    while (i < args->ac)
-    {
-        printf("Argument [%d]:\n", i);
-        printf("  av = %s\n", args->av[i]);
-        printf("  was_in_quote = %d\n", args->was_in_quote[i]);
-        printf("  pipe = %d\n", args->pipe[i]);
-        printf("  redirect_output = %d\n", args->redirect_output[i]);
-        printf("  append_redirect = %d\n", args->append_redirect[i]);
-        printf("  redirect_input = %d\n", args->redirect_input[i]);
-        printf("  heredoc = %d\n", args->heredoc[i]);
-		printf("\n\n");
-        i++;
-    }
-    printf("\n");
-}
-
-
 
 /* Cette fonction sert simplement a alleger le main mais peut etre qu'on peut tout mettre dans le main */
 int	parse_and_exec(char *rl, t_args *args, int error)
@@ -67,6 +23,7 @@ int	parse_and_exec(char *rl, t_args *args, int error)
 	{
 		init_all(args);
 		print_all(args); // DEL
+		dollars(args);
 		free_args_struct(&args);
 		// exec
 	}

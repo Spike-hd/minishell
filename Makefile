@@ -20,12 +20,16 @@ LIBFT_DIR = libft
 OBJ_DIR = objects
 
 # Fichiers sources
-SRC_FILES = errors.c main.c init_av.c init_metachar.c errors2.c error_quote.c
+SRC_FILES = errors/errors.c  errors/errors2.c errors/error_quote.c \
+			init/init_av.c init/init_metachar.c \
+			dollars/dollars_suite.c dollars/dollars.c \
+			main.c
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
 # Compilateur et options
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+INCLUDES = -I. -I$(LIBFT_DIR)
 
 # Bibliothèques et headers
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -41,19 +45,20 @@ $(OBJ_DIR):
 	@echo "$(YELLOW)Creating object directory $(OBJ_DIR)... $(COMPUTER)$(RESET)"
 
 # Créer la bibliothèque libft
-$(LIBFT):
-	make -C $(LIBFT_DIR)
+$(LIBFT): $(LIBFT_DIR)/Makefile
+	@make -C $(LIBFT_DIR)
 	@echo "$(GREEN)libft library built! $(CHECK_MARK)$(RESET)"
 
 # Créer l'exécutable
 $(MINISHELL): $(OBJ_DIR) $(OBJ) $(LIBFT)
 	@echo "$(YELLOW)Compiling $(MINISHELL)... $(COMPUTER)$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJ) -o $(MINISHELL) $(LIBFT) -lreadline -lncurses -I/usr/local/include -L/usr/local/lib
+	@$(CC) $(CFLAGS) $(OBJ) -o $(MINISHELL) $(LIBFT) -lreadline -lncurses
 	@echo "$(GREEN)$(MINISHELL) successfully created! $(THUMBS_UP)$(RESET)"
 
 # Règle pour générer les fichiers objets
 $(OBJ_DIR)/%.o: %.c $(INC)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Nettoyage des fichiers objets
 clean:

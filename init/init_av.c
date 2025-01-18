@@ -6,11 +6,11 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 13:16:43 by hduflos           #+#    #+#             */
-/*   Updated: 2025/01/16 17:25:25 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/18 19:04:30 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*extract_words(char *s, int i, int start)
 {

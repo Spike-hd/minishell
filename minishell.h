@@ -6,7 +6,7 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 14:12:17 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 19:48:42 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/18 19:41:52 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,14 @@ int		quote(char *s);
 
 // -------------PARSE 2 --------------
 int	init_all(t_args *args);
+
+// ---------------$-------------------
+int	dollars(t_args *args);
+int	replace_av(char *substr, char **av, int start);
+int	inside_single_quote(char *av, int limit);
+
+// ---------------UTILS-------------------
+char	*ft_strcpy(char *dest, char *src);
+char	*ft_strcat(char *dest, char *src);
 
 #endif

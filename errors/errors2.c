@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   errors2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hduflos <hduflos@student.42.fr>            +#+  +:+       +#+        */
+/*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 10:44:07 by hduflos           #+#    #+#             */
-/*   Updated: 2025/01/16 10:58:52 by hduflos          ###   ########.fr       */
+/*   Updated: 2025/01/18 19:04:16 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	free_av(char ***av, int ac)
 {

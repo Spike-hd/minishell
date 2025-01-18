@@ -6,11 +6,11 @@
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:12:50 by spike             #+#    #+#             */
-/*   Updated: 2025/01/16 17:36:34 by spike            ###   ########.fr       */
+/*   Updated: 2025/01/18 19:03:58 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 /* verifie si les quotes se ferment correctement */
 int	quote(char *s)
