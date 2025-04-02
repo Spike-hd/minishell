@@ -5,14 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 17:12:50 by spike             #+#    #+#             */
-/*   Updated: 2025/01/18 19:03:58 by spike            ###   ########.fr       */
+/*   Created: 2025/01/20 17:55:27 by spike             #+#    #+#             */
+/*   Updated: 2025/02/18 19:03:45 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/* verifie si les quotes se ferment correctement */
+static int	ft_isspace(int c)
+{
+	return (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r');
+}
+
+int	empty_rl(char *rl)
+{
+	int	i;
+
+	i = 0;
+	while (rl[i])
+	{
+		if (ft_isspace(rl[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	quote(char *s)
 {
 	int	i;
@@ -52,7 +71,8 @@ int	check_error_quote(char **str, int index)
 	}
 	return (0);
 }
-int	quote_prompt(char **result, int index)
+
+int	print_quote(char **result, int index)
 {
 	char	*qline;
 	char	*temp;
@@ -61,13 +81,18 @@ int	quote_prompt(char **result, int index)
 	{
 		qline = readline("quote> ");
 		if (!qline)
-			return (error_handle("problem with readline fct\n"));
+		{
+			ft_putstr_fd("problem with readline fct\n", 2);
+			return (-1);
+		}
 		temp = ft_strjoin(result[index - 1], qline);
 		free(result[index - 1]);
 		free(qline);
 		if (!temp)
-			return (error_handle("malloc error during quote completion\n"));
-
+		{
+			ft_putstr_fd("Mem alloc pb while concatenating strings", 2);
+			return (-1);
+		}
 		result[index - 1] = temp;
 	}
 	return (0);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dollars.c                                          :+:      :+:    :+:   */
+/*   parsing_exp.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 10:29:23 by spike             #+#    #+#             */
-/*   Updated: 2025/01/18 19:03:47 by spike            ###   ########.fr       */
+/*   Created: 2025/01/23 15:30:41 by spike             #+#    #+#             */
+/*   Updated: 2025/02/18 19:05:59 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	inside_single_quote(char *av, int limit)
 
 	if (limit == -1)
 		limit = ft_strlen(av);
-
 	i = 0;
 	count = 0;
 	while (i < limit)
@@ -31,7 +30,7 @@ int	inside_single_quote(char *av, int limit)
 	return (count % 2 != 0);
 }
 
-int	count_dollars(char *av)
+int	search_and_count_dollars(char *av)
 {
 	int	i;
 	int	count;
@@ -40,7 +39,7 @@ int	count_dollars(char *av)
 	count = 0;
 	while (av[i])
 	{
-		if (av[i] == '$' && !inside_single_quote(av, i));
+		if (av[i] == '$' && !inside_single_quote(av, i))
 			count++;
 		i++;
 	}
@@ -49,9 +48,9 @@ int	count_dollars(char *av)
 
 char	*substr_dollar(char *av)
 {
-	int	i;
-	int	start;
-	char *sub_av;
+	int		i;
+	int		start;
+	char	*sub_av;
 
 	i = 0;
 	while (av[i])
@@ -61,6 +60,7 @@ char	*substr_dollar(char *av)
 		i++;
 	}
 	start = i;
+	i++;
 	while (av[i])
 	{
 		if (av[i] == '$' || av[i] == '"' || av[i] == ' ')
@@ -73,28 +73,31 @@ char	*substr_dollar(char *av)
 	return (sub_av);
 }
 
-int	dollars(t_args *args)
+int	parse_exp(t_args *args, t_exp *exp)
 {
-	int	i;
-	int dollars;
-	char *sub_av;
+	int		i;
+	int		dollars;
+	char	*sub_av;
 
-	i = 0;
-	while (i < args->ac)
+	i = -1;
+	while (++i < args->ac)
 	{
-		dollars = count_dollars(args->av[i]);
+		dollars = search_and_count_dollars(args->av[i]);
 		while (dollars--)
 		{
 			if (!inside_single_quote(args->av[i], -1))
 			{
 				sub_av = substr_dollar(args->av[i]);
 				if (!sub_av)
-					return (error_handle("pb with $"));
-				if (replace_av(sub_av, &args->av[i], 0) == -1)
-					return (error_handle("pb with $"));
+					return (-1);
+				if (replace_av(sub_av, &args->av[i], 0, exp) == -1)
+				{
+					free(sub_av);
+					return (-1);
+				}
+				free(sub_av);
 			}
 		}
-		i++;
 	}
 	return (0);
 }

@@ -5,78 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/14 19:44:46 by spike             #+#    #+#             */
-/*   Updated: 2025/01/18 19:04:39 by spike            ###   ########.fr       */
+/*   Created: 2025/01/27 15:27:31 by spike             #+#    #+#             */
+/*   Updated: 2025/02/18 18:50:30 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*delete_quote(char *str, int count, int c)
+int	init_metachar(int ac, t_args *args)
 {
-	int		i;
-	int		j;
-	size_t	len;
-	char	*res;
-
-	len = ft_strlen(str);
-	len -= count;
-	printf("count = %d\n\n", count);
-	res = malloc(len + 1);
-	if (!res)
-	{
-		free(str);
-		return (NULL);
-	}
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != c)
-		{
-			res[j] = str[i];
-			j++;
-			i++;
-		}
-		else
-			i++;
-
-	}
-	res[i] = '\0';
-	free(str);
-	return (res);
-}
-
-int	init_was_in_quote(int *quote, char *str, char c)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-		{
-			count++;
-			if (*quote == 0)
-				*quote = 1;
-		}
-		i++;
-	}
-	if (count != 0)
-	{
-		str = delete_quote(str, count, c);
-		if (!str)
-			return (-1);
-	}
-	return (0);
-}
-
-int	init_table(int ac, t_args *args)
-{
-	args->was_in_quote = (int *)ft_calloc(ac, sizeof(int));
-	if (!args->was_in_quote)
+	args->metachar = (int *)ft_calloc(ac, sizeof(int));
+	if (!args->metachar)
 		return (-1);
 	args->pipe = (int *)ft_calloc(ac, sizeof(int));
 	if (!args->pipe)
@@ -96,7 +35,7 @@ int	init_table(int ac, t_args *args)
 	return (0);
 }
 
-void	init_metachar(t_args *args, char *av, int quote, int i)
+void	check_metachar(t_args *args, char *av, int quote, int i)
 {
 	int	len;
 
@@ -111,26 +50,26 @@ void	init_metachar(t_args *args, char *av, int quote, int i)
 		args->redirect_input[i] = 1;
 	if (ft_strncmp(av, "<<", len) == 0 && quote == 0 && len == 2)
 		args->heredoc[i] = 1;
+	if (args->pipe[i] == 1 || args->redirect_input[i] == 1
+		|| args->redirect_output[i] == 1
+		|| args->append_redirect[i] == 1
+		|| args->heredoc[i] == 1)
+		args->metachar[i] = 1;
 }
 
 int	init_all(t_args *args)
 {
 	int	i;
 
-	i = 0;
-	while (args->av[i])
-		i++;
-	args->ac = i;
-	if (init_table(args->ac, args) == -1)
-		return (free_args_struct(&args));
+	if (init_metachar(args->ac, args) == -1)
+	{
+		free_metachar(args);
+		return (-1);
+	}
 	i = 0;
 	while (i < args->ac)
 	{
-		if (init_was_in_quote(&args->was_in_quote[i], args->av[i], '\'') == -1)
-			return (free_args_struct(&args));
-		if (init_was_in_quote(&args->was_in_quote[i], args->av[i], '"') == -1)
-			return (free_args_struct(&args));
-		init_metachar(args, args->av[i], args->was_in_quote[i], i);
+		check_metachar(args, args->av[i], args->was_quoted[i], i);
 		i++;
 	}
 	return (0);

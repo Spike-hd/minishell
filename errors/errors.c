@@ -5,42 +5,107 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: spike <spike@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/13 19:38:06 by spike             #+#    #+#             */
-/*   Updated: 2025/01/18 19:04:18 by spike            ###   ########.fr       */
+/*   Created: 2025/01/20 17:02:39 by spike             #+#    #+#             */
+/*   Updated: 2025/02/18 19:02:11 by spike            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	*error_malloc(char **result, int index, int *error)
+void	free_metachar2(t_args *args)
 {
-	while (index--)
+	if (args->append_redirect)
 	{
-		if (result[index])
-			free(result[index]);
+		free(args->append_redirect);
+		args->append_redirect = NULL;
 	}
-	free(result);
-	*error = 1;
-	return (NULL);
+	if (args->redirect_input)
+	{
+		free(args->redirect_input);
+		args->redirect_input = NULL;
+	}
+	if (args->heredoc)
+	{
+		free(args->heredoc);
+		args->heredoc = NULL;
+	}
 }
 
-void	free_all(char *rl, char **av)
+int	free_metachar(t_args *args)
 {
-	int	index;
-
-	index = 0;
-	while (av[index])
+	if (args->metachar)
 	{
-		free(av[index]);
-		index++;
+		free(args->metachar);
+		args->metachar = NULL;
 	}
-	free(av);
-	free(rl);
+	if (args->was_quoted)
+	{
+		free(args->was_quoted);
+		args->was_quoted = NULL;
+	}
+	if (args->pipe)
+	{
+		free(args->pipe);
+		args->pipe = NULL;
+	}
+	if (args->redirect_output)
+	{
+		free(args->redirect_output);
+		args->redirect_output = NULL;
+	}
+	free_metachar2(args);
+	return (-1);
 }
 
-int	error_handle(char *s)
+int	free_split(char ***str, int index)
 {
-	printf("%s", s);
+	if (!str || !*str)
+		return (-1);
+	while (index > 0)
+	{
+		index--;
+		if ((*str)[index])
+		{
+			free((*str)[index]);
+			(*str)[index] = NULL;
+		}
+	}
+	free(*str);
+	*str = NULL;
+	return (-1);
+}
+
+int	stop_main(char *s, t_args *args, t_exp *exp, char *rl)
+{
+	if (args)
+		free (args);
+	if (exp)
+	{
+		free_split(&exp->av, exp->ac);
+		free_split(&exp->translate, exp->ac);
+		free (exp);
+	}
+	if (rl)
+	{
+		clear_history();
+		free (rl);
+	}
+	if (s)
+		ft_putstr_fd(s, 2);
 	return (1);
 }
 
+int	free_main(char *s, t_args *args, char *rl)
+{
+	if (args)
+	{
+		free_split(&args->av, args->ac);
+		free_metachar(args);
+		args->ac = 0;
+	}
+	if (rl)
+		free (rl);
+	if (s)
+		ft_putstr_fd(s, 2);
+	return (1);
+}
